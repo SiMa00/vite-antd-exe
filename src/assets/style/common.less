@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+// html, body {
+//     height: 100%;
+// }
+
+/* 文字省略号 */
+.too-much {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.too-much2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 自定义标签 */
+.my-tag {
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 13px;
+  width: 65%;
+  text-align: center;
+}
+
+.centerX {
+  display: flex;
+  justify-content: center;
+}
+
+.centerY {
+  display: flex;
+  align-items: center;
+}
+
+.centerXY {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 分页 样式 */
+.my-pg {
+  margin-top: 5px;
+  height: 30px;
+  text-align: right;
+  overflow: auto;
+}
+
+.colorWeak {
+  -webkit-filter: invert(80%);
+  filter: invert(80%);
+}
+.link-style {
+  color: #409eff;
+
+  &:hover {
+    cursor: pointer;
+    border-bottom: 1px solid #409eff;
+  }
+}
+
+.h100 {
+  height: 100%;
+}
+
+.w100 {
+  width: 100%;
+}
+
+.wh100 {
+  height: 100%;
+  width: 100%;
+}
+
+.packed-icon-button {
+  position: relative;
+  top: 0;
+  color: rgb(39, 31, 31);
+  transition: all 0.3s;
+
+  &:hover {
+    cursor: pointer;
+    color: rgb(104, 104, 240);
+  }
+
+  &:active {
+    top: 2px;
+    color: rgb(65, 65, 206);
+  }
+}
+
+.my-confirm {
+  width: 355px;
+}
+.menu-icon-wrapin {
+    width: 382px;
+    overflow-y: auto;
+    max-height: 320px;
+}
+
+.hover-shadow () {
+  transition: all .5s;
+
+  &:hover {
+    transform: translate3d(0, -3px, 0);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/***** 组件库 样式修改 ******/
+.ant-modal-title {
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px; // 垂直方向
+}
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset006pxrgba(0,0,0,0.3);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.136);
+  -webkit-box-shadow: inset006pxrgba(0,0,0,0.5);
+  transition: all 0.3s ease-out;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(110, 107, 107, 0.426);
+}
