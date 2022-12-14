@@ -1,6 +1,8 @@
 
 import { useUserStore } from "@/stores/user"
-import type { IAutoRequestCfg } from "auto-axios"
+// import type { IAutoRequestCfg } from "auto-axios"
+import type { IAutoRequestCfg } from "../packages/reqTypes"
+import { isNotEmpty, isEmpty, showModal } from "@/utils/tool";
 
 const router = useRouter()
 let userStore:any = null
@@ -18,9 +20,9 @@ export const AutoReqCfg:IAutoRequestCfg = {
     },
     REQ_SWITCH: {
         GetErrMsgWay: "byRes",
-        GlobalErrMsgSwitch: 1, // 全局错误消息 提示开关; 1 开启; 0 关闭
-        GlobalLoadingSwitch: 1, // 全局等待层 开关; 1 开启; 0 关闭
-        IfCancelRepeatpReq: 0, // 是否取消重复请求; 1 取消重复请求; 0 不取消
+        GlobalErrMsgSwitch: '1', // 全局错误消息 提示开关; 1 开启; 0 关闭
+        GlobalLoadingSwitch: '1', // 全局等待层 开关; 1 开启; 0 关闭
+        IfCancelDupReq: '1', // 是否取消重复请求; 1 取消重复请求; 0 不取消
     },
     RET_FIELDS_CFG: {
         RetCode: 'code',
@@ -41,7 +43,7 @@ export const AutoReqCfg:IAutoRequestCfg = {
         retMsg?: string,
         retCode?: string | number,
         statusCode?: string | number,
-        response?: AxiosResponse,
+        response?: any,
     ) {
         if (userStore === null) {
             userStore = useUserStore()
@@ -58,25 +60,25 @@ export const AutoReqCfg:IAutoRequestCfg = {
             }
         } else {
             if (
-                msg === 'token无效，请重新登录' ||
+                retMsg === 'token无效，请重新登录' ||
                 isEmpty(retCode) ||
-                (retCode === 2 && msg === 'fail') ||
-                (retCode === 1 && msg === 'Insufficient_permissions')
+                (retCode === 2 && retMsg === 'fail') ||
+                (retCode === 1 && retMsg === 'Insufficient_permissions')
             ) {
                 if (isIframe) {
                     window.parent.postMessage({ type: 'no_auth', data: '' }, '*')
-                    store.commit('user/SET_USER_INFO')
+                    userStore.SET_USER_INFO({})
                 } else {
-                    store.commit('user/SET_USER_INFO')
+                    userStore.SET_USER_INFO({})
                     router.push({ name: 'login' })
                 }
             } else {
                 let msgfinal = ''
-                if (resp && isNotEmpty(resp.data) && isNotEmpty(resp.data.errors)) {
-                    const errorStrArr = resp.data.errors.map(item => item.defaultMessage)
+                if (response && isNotEmpty(response.data) && isNotEmpty(response.data.errors)) {
+                    const errorStrArr:Array<string> = response.data.errors.map(item => item.defaultMessage)
                     msgfinal = errorStrArr.join(', ')
                 } else {
-                    msgfinal = msg
+                    msgfinal = retMsg ? retMsg : ''
                 }
 
                 showModal(msgfinal)

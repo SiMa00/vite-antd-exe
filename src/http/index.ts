@@ -1,7 +1,6 @@
 
 import ATAxios from "../packages/index"
 // import ATAxios from "auto-axios"
-// console.log('11 >', ATAxios)
 
 import type { IAutoRequestCfg } from "auto-axios"
 

@@ -2,10 +2,9 @@
 import axios from 'axios'
 import { cloneDeep } from "lodash"
 import { isNotEmpty, isEmpty, deleteNull, isFunc, list2Map } from "./utils.js";
-import reqDefaultValCfg from "./defaultVal"
+import { DEFAULT_VAL } from "./defaultCfg"
 import { getAutoResult } from "./handleRes"
 import type { AxiosInstance } from 'axios'
-// import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import type {
     IAutoRequestCfg,
     ILoad,
@@ -15,7 +14,9 @@ import type {
     IErrListItem,
     IpendingReq,
     IErrMap,
+    ISwitchVal,
 } from "./reqTypes"
+import { ESwitch } from "./reqTypes"
 
 class AutoAxios {
     private readonly instance: AxiosInstance
@@ -34,10 +35,10 @@ class AutoAxios {
         this.instance = axios.create({
             baseURL: reqConfig.REQ_CONST.BaseUrl,
             headers: {
-                ...(reqDefaultValCfg.xssProtection),
+                ...(DEFAULT_VAL.XssProtection),
                 ...reqConfig.REQ_WAYS_CFG?.DefaultHeader,
             },
-            timeout: reqConfig.REQ_CONST.Timeout || reqDefaultValCfg.timeout,
+            timeout: reqConfig.REQ_CONST.Timeout || DEFAULT_VAL.Timeout,
             withCredentials: true, // 跨域携带 cookie
         })
 
@@ -49,8 +50,7 @@ class AutoAxios {
         this.instance.interceptors.request.use(this.reqSuccess.bind(this), this.reqError.bind(this)) // 请求拦截器
         this.instance.interceptors.response.use(this.respSuc.bind(this), this.respError.bind(this)) // 响应拦截器
     }
-    
-    
+
     static setErrMap(eList: Array<IErrListItem>) {
         if (isNotEmpty(eList)) {
             AutoAxios.errMap = list2Map(eList, 'retCode')
@@ -72,19 +72,19 @@ class AutoAxios {
             }
             
             // customedData 里存好值，res 里不用重复判断取值
-            let loadingSwitch:'1'|'0'
-            if (isEmpty(config.customedData?.GlobalLoadingSwitch)) {
-                loadingSwitch = (this.reqConfig.REQ_SWITCH?.GlobalLoadingSwitch || reqDefaultValCfg.globalLoadingSwitch)
-                config.customedData!.GlobalLoadingSwitch = loadingSwitch
+            let loadingSwitch:ISwitchVal
+            if (config.customedData?.GlobalLoadingSwitch) {
+                loadingSwitch = <ISwitchVal>config.customedData?.GlobalLoadingSwitch
             } else {
-                loadingSwitch = <'1'|'0'>config.customedData?.GlobalLoadingSwitch
+                loadingSwitch = (this.reqConfig.REQ_SWITCH?.GlobalLoadingSwitch || DEFAULT_VAL.GlobalLoadingSwitch)
+                config.customedData!.GlobalLoadingSwitch = loadingSwitch
             }
             
             if (isEmpty(config.customedData?.GlobalErrMsgSwitch)) {
-                config.customedData!.GlobalErrMsgSwitch = (this.reqConfig.REQ_SWITCH?.GlobalErrMsgSwitch || reqDefaultValCfg.globalErrMsgSwitch)
+                config.customedData!.GlobalErrMsgSwitch = (this.reqConfig.REQ_SWITCH?.GlobalErrMsgSwitch || DEFAULT_VAL.GlobalErrMsgSwitch)
             }
 
-            if (loadingSwitch === '1') { // 开启了全局 Loading
+            if (loadingSwitch === ESwitch.On) { // 开启了全局 Loading
                 this.handleLoading(true)
             }
             
@@ -107,8 +107,8 @@ class AutoAxios {
 
 
             const i18nKey = this.reqConfig.RET_FIELDS_CFG.LangStorageKey
-            const i18nVal = window.localStorage[i18nKey] || this.reqConfig.REQ_CONST.DefaultLang || reqDefaultValCfg.defaultLang
-            const langFd = this.reqConfig.RET_FIELDS_CFG.LangHttpKey || reqDefaultValCfg.langHttpKey
+            const i18nVal = window.localStorage[i18nKey] || this.reqConfig.REQ_CONST.DefaultLang || DEFAULT_VAL.DefaultLang
+            const langFd = this.reqConfig.RET_FIELDS_CFG.LangHttpKey || DEFAULT_VAL.LangHttpKey
             if (langFd && i18nVal) {
                 config.headers![langFd] = i18nVal
             }
@@ -133,7 +133,8 @@ class AutoAxios {
             // }
             
             /** ************************************** 处理重复请求 start  **************************************/
-            if (this.reqConfig.REQ_SWITCH?.IfCancelRepeatpReq === '1') { // 取消重复请求
+            const reptReqFlag = config.customedData?.IfCancelDupReq || this.reqConfig.REQ_SWITCH?.IfCancelDupReq || DEFAULT_VAL.IfCancelDupReq
+            if (reptReqFlag === ESwitch.On) { // 取消重复请求
                 const { url, method, data = {}, params = {} } = config
                 // const { url, method, data = {}, params = {}, pendingCancelSwitch = true } = config
                 // // 将数据转为JSON字符串格式，后面比较好对比;
@@ -186,8 +187,8 @@ class AutoAxios {
             }
         }
         
-        const loadingSwitch = <'1'|'0'>response.config.customedData!.GlobalLoadingSwitch
-        if (loadingSwitch === '1') { // 开启了全局 Loading
+        const loadingSwitch = <ISwitchVal>response.config.customedData!.GlobalLoadingSwitch
+        if (loadingSwitch === ESwitch.On) { // 开启了全局 Loading
             this.handleLoading(false)
         }
 
@@ -208,7 +209,7 @@ class AutoAxios {
                     }
                 }
 
-                if (error.config.customedData.GlobalLoadingSwitch === 1) { // 开启过 loading
+                if (error.config.customedData.GlobalLoadingSwitch === ESwitch.On) { // 开启过 loading
                     this.handleLoading(false)
                 }
             } else {
@@ -315,15 +316,15 @@ class AutoAxios {
                         orgResData: response,
                     }
                 } else {
-                    const errorMsgSwitch = <'1'|'0'>response.config.customedData!.GlobalErrMsgSwitch
-                    return getAutoResult(this.reqConfig, response, errorMsgSwitch === '1', AutoAxios.errMap, AutoAxios.pendingRequest)
+                    const errorMsgSwitch = <ISwitchVal>response.config.customedData!.GlobalErrMsgSwitch
+                    return getAutoResult(this.reqConfig, response, errorMsgSwitch === ESwitch.On, AutoAxios.errMap, AutoAxios.pendingRequest)
                 }
             } catch (err) {
                 return Promise.reject(err)
             }
         } else {
-            const msgSwitch = ajaxCfg.customedData?.GlobalErrMsgSwitch || reqDefaultValCfg.globalErrMsgSwitch
-            if (msgSwitch === '1') {
+            const msgSwitch = ajaxCfg.customedData?.GlobalErrMsgSwitch || DEFAULT_VAL.GlobalErrMsgSwitch
+            if (msgSwitch === ESwitch.On) {
                 this.reqConfig.showTipBox('EmptyUrl')
             }
             
@@ -335,7 +336,7 @@ class AutoAxios {
     // csrfSwitch === '1' 增删改操作 需鉴权; csrfSwitch !=='1' 无需鉴权
     async http(options:IRequestConfig){
         
-        if (options && options.customedData && (options.customedData.CsrfSwitch === '1')) {
+        if (options && options.customedData && (options.customedData.CsrfSwitch === ESwitch.On)) {
             try {
                 const resp = await this.httpUtil({
                     url: this.reqConfig.REQ_CONST.AuthOperationUrl,

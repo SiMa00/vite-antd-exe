@@ -1,8 +1,8 @@
 <template>
     <div class="TestReq-wrap">
-        <a-button type="primary" @click="reptReq1">一次性取消重复请求</a-button>
-        <a-button type="primary" @click="reptReq2">取消某个请求的重复请求</a-button>
-        <a-button @click="controlErrMsg">请求错误弹框控制1次</a-button>
+        <a-button type="primary" @click="reptReq1" style="margin-right: 20px;">一次性取消重复请求</a-button>
+        <a-button type="primary" @click="reptReq2" style="margin-right: 20px;">取消某个请求的重复请求</a-button>
+        <a-button @click="controlErrMsg" style="margin-right: 20px;">请求错误弹框控制1次</a-button>
     </div>
 </template>
 

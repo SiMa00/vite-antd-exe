@@ -19,7 +19,7 @@ import type {
 import type { ModalProps, ModalFuncProps } from "ant-design-vue";
 
 
-export function showModal(content:string, type:ModalFuncProps['type'] = 'warning', title = '温馨提示', orgOpts:ModalProps) {
+export function showModal(content:string, type:ModalFuncProps['type'] = 'warning', title = '温馨提示', orgOpts?:ModalProps) {
     Modal[type]({
         title,
         content,

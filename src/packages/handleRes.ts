@@ -1,6 +1,6 @@
 
 import { isEmpty, transNullChar } from './utils'
-import reqDefaultValCfg from "./defaultVal"
+import { DEFAULT_VAL } from "./defaultCfg"
 import type { IAutoRequestCfg, IRespConfig, IErrMap, IAutoResp, IpendingReq } from "./reqTypes"
 
 function getMsgByCode(respCode:number|string, errorMapIn?:IErrMap):string {
@@ -36,7 +36,7 @@ function getRetData(reqConfig:IAutoRequestCfg, response:IRespConfig, errMap?:IEr
         // 方式1: 先取 respData 的返回消息,若无,再取 错误映射的消息
         // 方式2: 不论有无 respData 的返回消息,直接根据返回码 取 错误映射的消息
         let finalMsg = ''
-        const msgWay = reqConfig.REQ_SWITCH?.GetErrMsgWay || reqDefaultValCfg.getErrMsgWay
+        const msgWay = reqConfig.REQ_SWITCH?.GetErrMsgWay || DEFAULT_VAL.GetErrMsgWay
         if (msgWay === 'byMap') {
             finalMsg = getMsgByCode(retCode, errMap)
         } else {
