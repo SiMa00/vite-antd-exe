@@ -32,10 +32,10 @@ export interface IAutoRequestCfg {
         DefaultLang?: string,
     }
     REQ_SWITCH?: {
-        GetErrMsgWay?: "byMap" | "byRes",
-        GlobalErrMsgSwitch?: 1 | 0, // 全局错误消息 提示开关; 1 开启; 0 关闭
-        GlobalLoadingSwitch?: 1 | 0, // 全局等待层 开关; 1 开启; 0 关闭
-        IfCancelRepeatpReq?: 1 | 0, // 是否取消重复请求; 1 取消重复请求; 0 不取消
+        GetErrMsgWay?: "byMap"|"byRes",
+        GlobalErrMsgSwitch?: '1'|'0', // 全局错误消息 提示开关; 1 开启; 0 关闭
+        GlobalLoadingSwitch?: '1'|'0', // 全局等待层 开关; 1 开启; 0 关闭
+        IfCancelRepeatpReq?: '1'|'0', // 是否取消重复请求; 1 取消重复请求; 0 不取消
     },
     RET_FIELDS_CFG: {
         RetCode: string,
@@ -78,11 +78,11 @@ export interface IErrMap { [propName: string | number]: IErrListItem }
 export interface IRequestConfig extends AxiosRequestConfig {
     customedData?: {
         GetErrMsgWay?: "byMap"|"byRes",
-        GlobalErrMsgSwitch?: 1|0, // 全局错误消息 提示开关; 1 开启; 0 关闭
-        GlobalLoadingSwitch?: 1|0, // 全局等待层 开关; 1 开启; 0 关闭
-        IfCancelRepeatpReq?: 1|0, // 是否取消重复请求; 1 yes=取消重复请求; 0 不取消
+        GlobalErrMsgSwitch?: '1'|'0', // 全局错误消息 提示开关; 1 开启; 0 关闭
+        GlobalLoadingSwitch?: '1'|'0', // 全局等待层 开关; 1 开启; 0 关闭
+        IfCancelRepeatpReq?: '1'|'0', // 是否取消重复请求; 1 yes=取消重复请求; 0 不取消
         IfNull2Empty?: boolean,
-        CsrfSwitch?: 1|0, // 1 开启
+        CsrfSwitch?: '1'|'0', // 1 开启
         requestMark?: string,
     },
 }
@@ -99,9 +99,9 @@ export interface IReqDefaultVal {
     defaultLang: string,
 
     getErrMsgWay: "byMap"|"byRes",
-    globalErrMsgSwitch: 1|0,
-    globalLoadingSwitch: 1|0,
-    IfCancelRepeatpReq: 1|0,
+    globalErrMsgSwitch: '1'|'0',
+    globalLoadingSwitch: '1'|'0',
+    IfCancelRepeatpReq: '1'|'0',
 
     langHttpKey: string,
     defaultReqWay: 'post' | 'get' | 'put' | 'delete'

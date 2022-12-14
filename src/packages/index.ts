@@ -72,19 +72,19 @@ class AutoAxios {
             }
             
             // customedData 里存好值，res 里不用重复判断取值
-            let loadingSwitch:0|1
+            let loadingSwitch:'1'|'0'
             if (isEmpty(config.customedData?.GlobalLoadingSwitch)) {
                 loadingSwitch = (this.reqConfig.REQ_SWITCH?.GlobalLoadingSwitch || reqDefaultValCfg.globalLoadingSwitch)
                 config.customedData!.GlobalLoadingSwitch = loadingSwitch
             } else {
-                loadingSwitch = <0|1>config.customedData?.GlobalLoadingSwitch
+                loadingSwitch = <'1'|'0'>config.customedData?.GlobalLoadingSwitch
             }
             
             if (isEmpty(config.customedData?.GlobalErrMsgSwitch)) {
                 config.customedData!.GlobalErrMsgSwitch = (this.reqConfig.REQ_SWITCH?.GlobalErrMsgSwitch || reqDefaultValCfg.globalErrMsgSwitch)
             }
 
-            if (loadingSwitch === 1) { // 开启了全局 Loading
+            if (loadingSwitch === '1') { // 开启了全局 Loading
                 this.handleLoading(true)
             }
             
@@ -133,7 +133,7 @@ class AutoAxios {
             // }
             
             /** ************************************** 处理重复请求 start  **************************************/
-            if (this.reqConfig.REQ_SWITCH?.IfCancelRepeatpReq === 1) { // 取消重复请求
+            if (this.reqConfig.REQ_SWITCH?.IfCancelRepeatpReq === '1') { // 取消重复请求
                 const { url, method, data = {}, params = {} } = config
                 // const { url, method, data = {}, params = {}, pendingCancelSwitch = true } = config
                 // // 将数据转为JSON字符串格式，后面比较好对比;
@@ -186,8 +186,8 @@ class AutoAxios {
             }
         }
         
-        const loadingSwitch = <0|1>response.config.customedData!.GlobalLoadingSwitch
-        if (loadingSwitch === 1) { // 开启了全局 Loading
+        const loadingSwitch = <'1'|'0'>response.config.customedData!.GlobalLoadingSwitch
+        if (loadingSwitch === '1') { // 开启了全局 Loading
             this.handleLoading(false)
         }
 
@@ -315,15 +315,15 @@ class AutoAxios {
                         orgResData: response,
                     }
                 } else {
-                    const errorMsgSwitch = <0|1>response.config.customedData!.GlobalErrMsgSwitch
-                    return getAutoResult(this.reqConfig, response, errorMsgSwitch === 1, AutoAxios.errMap, AutoAxios.pendingRequest)
+                    const errorMsgSwitch = <'1'|'0'>response.config.customedData!.GlobalErrMsgSwitch
+                    return getAutoResult(this.reqConfig, response, errorMsgSwitch === '1', AutoAxios.errMap, AutoAxios.pendingRequest)
                 }
             } catch (err) {
                 return Promise.reject(err)
             }
         } else {
             const msgSwitch = ajaxCfg.customedData?.GlobalErrMsgSwitch || reqDefaultValCfg.globalErrMsgSwitch
-            if (msgSwitch === 1) {
+            if (msgSwitch === '1') {
                 this.reqConfig.showTipBox('EmptyUrl')
             }
             
@@ -335,7 +335,7 @@ class AutoAxios {
     // csrfSwitch === '1' 增删改操作 需鉴权; csrfSwitch !=='1' 无需鉴权
     async http(options:IRequestConfig){
         
-        if (options && options.customedData && (options.customedData.CsrfSwitch === 1)) {
+        if (options && options.customedData && (options.customedData.CsrfSwitch === '1')) {
             try {
                 const resp = await this.httpUtil({
                     url: this.reqConfig.REQ_CONST.AuthOperationUrl,
