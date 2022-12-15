@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "ant-design-vue": "^3.2.15",
-    "auto-axios": "^0.0.43",
+    "auto-axios": "^0.0.44",
     "axios": "^1.2.1",
     "pinia": "^2.0.26",
     "pinia-plugin-persist": "^1.0.0",

@@ -1,6 +1,6 @@
 
-import ATAxios from "../packages/index"
-// import ATAxios from "auto-axios"
+// import ATAxios from "../packages/index"
+import ATAxios from "auto-axios"
 
 import type { IAutoRequestCfg } from "auto-axios"
 

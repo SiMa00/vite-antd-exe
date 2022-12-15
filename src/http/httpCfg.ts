@@ -2,6 +2,7 @@
 import { useUserStore } from "@/stores/user"
 // import type { IAutoRequestCfg } from "auto-axios"
 import type { IAutoRequestCfg } from "../packages/reqTypes"
+import { ESwitch } from "../packages/reqTypes"
 import { isNotEmpty, isEmpty, showModal } from "@/utils/tool";
 
 const router = useRouter()
@@ -20,9 +21,9 @@ export const AutoReqCfg:IAutoRequestCfg = {
     },
     REQ_SWITCH: {
         GetErrMsgWay: "byRes",
-        GlobalErrMsgSwitch: '1', // 全局错误消息 提示开关; 1 开启; 0 关闭
-        GlobalLoadingSwitch: '1', // 全局等待层 开关; 1 开启; 0 关闭
-        IfCancelDupReq: '1', // 是否取消重复请求; 1 取消重复请求; 0 不取消
+        GlobalErrMsgSwitch: ESwitch.On, // 全局错误消息 提示开关; 1 开启; 0 关闭
+        GlobalLoadingSwitch: ESwitch.On, // 全局等待层 开关; 1 开启; 0 关闭
+        IfCancelDupReq: ESwitch.On, // 是否取消重复请求; 1 取消重复请求; 0 不取消
     },
     RET_FIELDS_CFG: {
         RetCode: 'code',
