@@ -14,7 +14,6 @@ import type {
     IErrListItem,
     IpendingReq,
     IErrMap,
-    ISwitchVal,
 } from "./reqTypes"
 import { ESwitch } from "./reqTypes"
 
@@ -72,9 +71,9 @@ class AutoAxios {
             }
             
             // customedData 里存好值，res 里不用重复判断取值
-            let loadingSwitch:ISwitchVal
+            let loadingSwitch:ESwitch
             if (config.customedData?.GlobalLoadingSwitch) {
-                loadingSwitch = <ISwitchVal>config.customedData?.GlobalLoadingSwitch
+                loadingSwitch = <ESwitch>config.customedData?.GlobalLoadingSwitch
             } else {
                 loadingSwitch = (this.reqConfig.REQ_SWITCH?.GlobalLoadingSwitch || DEFAULT_VAL.GlobalLoadingSwitch)
                 config.customedData!.GlobalLoadingSwitch = loadingSwitch
@@ -191,7 +190,7 @@ class AutoAxios {
             }
         }
         
-        const loadingSwitch = <ISwitchVal>response.config.customedData!.GlobalLoadingSwitch
+        const loadingSwitch = <ESwitch>response.config.customedData!.GlobalLoadingSwitch
         if (loadingSwitch === ESwitch.On) { // 开启了全局 Loading
             this.handleLoading(false)
         }
@@ -322,7 +321,7 @@ class AutoAxios {
                         orgResData: response,
                     }
                 } else {
-                    const errorMsgSwitch = <ISwitchVal>response.config.customedData!.GlobalErrMsgSwitch
+                    const errorMsgSwitch = <ESwitch>response.config.customedData!.GlobalErrMsgSwitch
                     return getAutoResult(this.reqConfig, response, errorMsgSwitch === ESwitch.On, AutoAxios.errMap, AutoAxios.pendingRequest)
                 }
             } catch (err) {

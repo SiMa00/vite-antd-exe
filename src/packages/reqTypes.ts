@@ -7,7 +7,6 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 // import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 
 /************************************ 内部使用 start *************************************/ 
-export type ISwitchVal = '0'|'1'
 export enum ESwitch {
     On = '1', // 开启的 值
     Off = '0',  // 关闭的 值
@@ -19,9 +18,9 @@ export interface IReqDefaultVal {
     MaskClassNames: Array<string>,
 
     GetErrMsgWay: "byMap"|"byRes",
-    GlobalErrMsgSwitch: ISwitchVal,
-    GlobalLoadingSwitch: ISwitchVal,
-    IfCancelDupReq: ISwitchVal,
+    GlobalErrMsgSwitch: ESwitch,
+    GlobalLoadingSwitch: ESwitch,
+    IfCancelDupReq: ESwitch,
 
     LangHttpKey: string,
     DefaultReqWay: 'post' | 'get' | 'put' | 'delete'
@@ -49,11 +48,11 @@ export interface IErrMap { [propName: string | number]: IErrListItem }
 export interface IRequestConfig extends AxiosRequestConfig {
     customedData?: {
         GetErrMsgWay?: "byMap"|"byRes",
-        GlobalErrMsgSwitch?: ISwitchVal, // 全局错误消息 提示开关; 1 开启; 0 关闭
-        GlobalLoadingSwitch?: ISwitchVal, // 全局等待层 开关; 1 开启; 0 关闭
-        IfCancelDupReq?: ISwitchVal, // 是否取消重复请求; 1 yes=取消重复请求; 0 不取消
+        GlobalErrMsgSwitch?: ESwitch, // 全局错误消息 提示开关; 1 开启; 0 关闭
+        GlobalLoadingSwitch?: ESwitch, // 全局等待层 开关; 1 开启; 0 关闭
+        IfCancelDupReq?: ESwitch, // 是否取消重复请求; 1 yes=取消重复请求; 0 不取消
         IfNull2Empty?: boolean,
-        CsrfSwitch?: ISwitchVal, // 1 开启
+        CsrfSwitch?: ESwitch, // 1 开启
         requestMark?: string,
     },
 }
@@ -104,9 +103,9 @@ export interface IAutoRequestCfg {
     }
     REQ_SWITCH?: {
         GetErrMsgWay?: "byMap"|"byRes",
-        GlobalErrMsgSwitch?: ISwitchVal, // 全局错误消息 提示开关; 1 开启; 0 关闭
-        GlobalLoadingSwitch?: ISwitchVal, // 全局等待层 开关; 1 开启; 0 关闭
-        IfCancelDupReq?: ISwitchVal, // 是否取消重复请求; 1 取消重复请求; 0 不取消
+        GlobalErrMsgSwitch?: ESwitch, // 全局错误消息 提示开关; 1 开启; 0 关闭
+        GlobalLoadingSwitch?: ESwitch, // 全局等待层 开关; 1 开启; 0 关闭
+        IfCancelDupReq?: ESwitch, // 是否取消重复请求; 1 取消重复请求; 0 不取消
     },
     RET_FIELDS_CFG: {
         RetCode: string,
