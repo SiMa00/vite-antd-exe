@@ -1,5 +1,6 @@
 
 import type { IReqDefaultVal } from "./reqTypes"
+import { ESwitch } from "./reqTypes";
 
 export const DEFAULT_VAL:IReqDefaultVal = {
     Timeout: 1 * 60 * 1000, // ms; 默认 1分钟
@@ -7,9 +8,9 @@ export const DEFAULT_VAL:IReqDefaultVal = {
     MaskClassNames:['.ant-message-notice', '.ant-modal-mask', '.el-message', '.el-message-box'],
 
     GetErrMsgWay: 'byRes',
-    GlobalErrMsgSwitch: '1', // 1 开启; 0 关闭
-    GlobalLoadingSwitch: '0', // 1 开启; 0 关闭
-    IfCancelDupReq: '0', // 是否取消重复请求; 1 取消重复请求; 0 不取消
+    GlobalErrMsgSwitch: ESwitch.On, // 1 开启; 0 关闭
+    GlobalLoadingSwitch: ESwitch.Off, // 1 开启; 0 关闭
+    IfCancelDupReq: ESwitch.Off, // 是否取消重复请求; 1 取消重复请求; 0 不取消
 
     LangHttpKey: 'accept-language',
     DefaultReqWay: 'post',
