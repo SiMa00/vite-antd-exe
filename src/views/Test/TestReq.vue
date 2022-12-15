@@ -7,8 +7,9 @@
 </template>
 
 <script setup lang="ts">
+import { message } from 'ant-design-vue';
 import { getUserSelfAPI } from "@/api/userAPI"
-import { getPlatformListAPI } from "@/api/systemAPI"
+import { getPlatformListAPI, addMenuAPI, getMenuInfoAPI, modifyMenuAPI } from "@/api/systemAPI"
 
 async function reptReq1() {
     const res = await Promise.all([
@@ -34,14 +35,13 @@ async function reptReq2() {
 
 
 async function controlErrMsg() {
-    // const res = await Promise.all([
-    //     getUserSelfAPI(), 
-    //     getUserSelfAPI(),
-    //     getUserSelfAPI(),
-    //     getUserSelfAPI(),
-    //     getUserSelfAPI(),
-    //     getUserSelfAPI(),
-    // ])
+    const res0 = await addMenuAPI({})
+    message.success('This is a success message')
+    const res1 = await getMenuInfoAPI('fff')
+    message.success('This is a success message')
+    const res2 = await modifyMenuAPI({})
+    message.success('This is a success message')
+    
     // console.log(res)
 }
 </script>

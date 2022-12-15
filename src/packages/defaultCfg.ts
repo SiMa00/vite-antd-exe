@@ -4,6 +4,7 @@ import type { IReqDefaultVal } from "./reqTypes"
 export const DEFAULT_VAL:IReqDefaultVal = {
     Timeout: 1 * 60 * 1000, // ms; 默认 1分钟
     DefaultLang: 'zh', // TODO 根据系统浏览器
+    MaskClassNames:['.ant-message-notice', '.ant-modal-mask', '.el-message', '.el-message-box'],
 
     GetErrMsgWay: 'byRes',
     GlobalErrMsgSwitch: '1', // 1 开启; 0 关闭

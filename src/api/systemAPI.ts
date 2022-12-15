@@ -9,6 +9,7 @@ export function getPlatformListAPI (params?:IObjAny) {
         url: `/portal/common/dict/platform`,
         method: 'get',
         params,
+        customedData: { IfCancelDupReq: '0'},
         transformResponse,
     })
 }

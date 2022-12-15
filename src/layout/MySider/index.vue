@@ -81,7 +81,7 @@ const rootSubmenuKeysIn = computed(() => {
 
 function clickMenuItem(item:IObjAny) {
     if (item.key) {
-        router.push(item.key)
+        router.push(`/frame/${item.key}`)
     } 
 }
 function onOpenChange(openKeys:Array<string>) {

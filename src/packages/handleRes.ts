@@ -1,5 +1,5 @@
 
-import { isEmpty, transNullChar } from './utils'
+import { isEmpty, transNullChar, handleMask1 } from './utils'
 import { DEFAULT_VAL } from "./defaultCfg"
 import type { IAutoRequestCfg, IRespConfig, IErrMap, IAutoResp, IpendingReq } from "./reqTypes"
 
@@ -68,7 +68,8 @@ export function getAutoResult(
     if (res0.isOk === true) {
         return res0
     } else {
-        if (errMsgFlag && pendingReq && pendingReq.length === 0) {
+
+        if (errMsgFlag && pendingReq && pendingReq.length === 0 && handleMask1(reqConfig.REQ_CONST.MaskClassNames)) {
             reqConfig.showTipBox(res0.retMsg, res0.retCode, response.status, response)
         }
         

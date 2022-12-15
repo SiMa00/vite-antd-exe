@@ -45,45 +45,49 @@ export const AutoReqCfg:IAutoRequestCfg = {
         statusCode?: string | number,
         response?: any,
     ) {
-        if (userStore === null) {
-            userStore = useUserStore()
+        if (retMsg) {
+            showModal(retMsg)
         }
-        const loadType = userStore.loadType
-        const isIframe = loadType === 'iframe'
+        
+        // if (userStore === null) {
+        //     userStore = useUserStore()
+        // }
+        // const loadType = userStore.loadType
+        // const isIframe = loadType === 'iframe'
 
-        if (statusCode === 401 || statusCode === 403) {
-            if (isIframe) {
-                window.parent.postMessage({ type: 'no_auth', data: '' }, '*')
-            } else {
-                userStore.SET_USER_INFO({})
-                router.push({ name: 'login' })
-            }
-        } else {
-            if (
-                retMsg === 'token无效，请重新登录' ||
-                isEmpty(retCode) ||
-                (retCode === 2 && retMsg === 'fail') ||
-                (retCode === 1 && retMsg === 'Insufficient_permissions')
-            ) {
-                if (isIframe) {
-                    window.parent.postMessage({ type: 'no_auth', data: '' }, '*')
-                    userStore.SET_USER_INFO({})
-                } else {
-                    userStore.SET_USER_INFO({})
-                    router.push({ name: 'login' })
-                }
-            } else {
-                let msgfinal = ''
-                if (response && isNotEmpty(response.data) && isNotEmpty(response.data.errors)) {
-                    const errorStrArr:Array<string> = response.data.errors.map(item => item.defaultMessage)
-                    msgfinal = errorStrArr.join(', ')
-                } else {
-                    msgfinal = retMsg ? retMsg : ''
-                }
+        // if (statusCode === 401 || statusCode === 403) {
+        //     if (isIframe) {
+        //         window.parent.postMessage({ type: 'no_auth', data: '' }, '*')
+        //     } else {
+        //         userStore.SET_USER_INFO({})
+        //         router.push({ name: 'login' })
+        //     }
+        // } else {
+        //     if (
+        //         retMsg === 'token无效，请重新登录' ||
+        //         isEmpty(retCode) ||
+        //         (retCode === 2 && retMsg === 'fail') ||
+        //         (retCode === 1 && retMsg === 'Insufficient_permissions')
+        //     ) {
+        //         if (isIframe) {
+        //             window.parent.postMessage({ type: 'no_auth', data: '' }, '*')
+        //             userStore.SET_USER_INFO({})
+        //         } else {
+        //             userStore.SET_USER_INFO({})
+        //             router.push({ name: 'login' })
+        //         }
+        //     } else {
+        //         let msgfinal = ''
+        //         if (response && isNotEmpty(response.data) && isNotEmpty(response.data.errors)) {
+        //             const errorStrArr:Array<string> = response.data.errors.map(item => item.defaultMessage)
+        //             msgfinal = errorStrArr.join(', ')
+        //         } else {
+        //             msgfinal = retMsg ? retMsg : ''
+        //         }
 
-                showModal(msgfinal)
-            }
-        }
+        //         showModal(msgfinal)
+        //     }
+        // }
     },
     // 返回 loadService 对象需要提供 closeLoadMask() + showLoadMask() 方法
     // getLoadService?: () => ILoad;

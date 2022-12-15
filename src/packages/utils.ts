@@ -1,4 +1,5 @@
 
+import { DEFAULT_VAL } from "./defaultCfg";
 import type { IObjAny } from "./reqTypes"
 
 export function isEmpty<T>(b:T):boolean {
@@ -114,4 +115,19 @@ export function deleteNull(obj:IObjAny, trans2EmptyChar:boolean = false, trim:bo
     } else {
         return obj
     }
+}
+// true 放开不控制 弹框; false 不能再弹框了
+export function handleMask1(maskClassNames?:Array<string>) {
+    let flag = true
+    const classArr = maskClassNames || DEFAULT_VAL.MaskClassNames
+    for (let i = 0; i < classArr.length; i++) {
+        const ele = classArr[i]
+        const dom = document.querySelector(ele)
+        if (dom) {
+            flag = false
+        }
+        
+    }
+    
+    return flag
 }

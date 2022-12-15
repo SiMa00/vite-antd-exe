@@ -16,6 +16,7 @@ export interface IObjAny { [propName: string | number]: any }
 export interface IReqDefaultVal {
     Timeout: number,
     DefaultLang: string,
+    MaskClassNames: Array<string>,
 
     GetErrMsgWay: "byMap"|"byRes",
     GlobalErrMsgSwitch: ISwitchVal,
@@ -99,6 +100,7 @@ export interface IAutoRequestCfg {
 
         Timeout?: number, // s; window.systemCfg.reqTimeout, // m * s
         DefaultLang?: string,
+        MaskClassNames?: Array<string>,
     }
     REQ_SWITCH?: {
         GetErrMsgWay?: "byMap"|"byRes",
