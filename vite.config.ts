@@ -5,7 +5,6 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from "unplugin-auto-import/vite"
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
-// import styleImport from 'vite-plugin-style-import'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,17 +15,6 @@ export default defineConfig({
             imports: ['vue','vue-router'], //vue: 自动引入vue的 ref、toRefs、onmounted等，无需在页面中再次引入
             dts: "src/auto-import.d.ts" // 生成在src路径下名为auto-import.d.ts的声明文件
         }),
-        // styleImport({
-        //     libs: [
-        //       {
-        //         libraryName: 'ant-design-vue',
-        //         esModule: true,
-        //         resolveStyle: (name) => {
-        //           return `ant-design-vue/es/${name}/style/index`;
-        //         },
-        //       },
-        //     ]
-        // })
     ],
     resolve: {
         alias: {
