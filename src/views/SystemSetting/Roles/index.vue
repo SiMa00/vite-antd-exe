@@ -117,7 +117,7 @@ const tableState = reactive({
         {
             key: "action",
             title: "操作",
-            width: 120,
+            width: 150,
             fixed: 'right',
         },
     ],
@@ -188,6 +188,7 @@ const formButtonList = reactive([
     },
 ])
 const tableActions = [
+    { key: 'view', label: '详情', clickEvt: tableActClick, ifShow: ['sys:role:details'] },
     { key: 'modify', label: '修改', clickEvt: tableActClick, ifShow: ['sys:role:edit', 'sys:role:details'] },
     {
         key: 'delete-cud',
@@ -258,7 +259,19 @@ async function fetchData() {
     return newRes
 }
 async function tableActClick(act, row) {
-    if (act === 'modify') {
+    if (act === 'view') {
+        modalCfgState.diagActType = 'view'
+        const res = await getRoleInfoAPI(row.id)
+        if (res.isOk) {
+            diaState.diaFormModel = res.retData
+            diaState.diaOrgCfg.title = '查看角色详情'
+            diaState.diaVisible = true
+
+            if (isEmpty(modalCfgState.diagInitFormModel)) {
+                modalCfgState.diagInitFormModel = JSON.parse(JSON.stringify(res.retData))
+            }
+        }
+    } else if (act === 'modify') {
         modalCfgState.diagActType = 'modify'
         const res = await getRoleInfoAPI(row.id)
         if (res.isOk) {

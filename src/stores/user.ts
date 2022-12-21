@@ -14,6 +14,7 @@ export const useUserStore = defineStore('user', {
             platformName: '',
         } as IObjAny,
 
+        allMenus: [] as Array<IObjAny>,  // 所有菜单 的原始未加工数据
         uAllMenus: [] as Array<IFontMenu>,
         uSiderMenu: undefined as undefined|Array<IFontMenu>,
         operPermissions: [] as []|Array<string>,
@@ -37,6 +38,9 @@ export const useUserStore = defineStore('user', {
     actions: {
         SET_lOAD_TYPE (data:string) {
             this.loadType = data
+        },
+        SET_ALL_MENUS (state, data) {
+            this.allMenus = data
         },
         SET_U_ALL_MENUS (data?: Array<IFontMenu>) {
             if (data) {
@@ -111,6 +115,7 @@ export const useUserStore = defineStore('user', {
                 if (isSuperAdmin) {
                     const res1 = await getSysMenusListAPI({})
                     const { userMenus, siderMenus, oPermissions } = generateMenuRoutes(res1.retData, true)
+                    this.SET_ALL_MENUS(res1.retData)
                     this.SET_U_ALL_MENUS(userMenus)
                     this.SET_SIDER_MENUS(siderMenus)
                     this.SET_OPER_PERMS(oPermissions)
@@ -119,13 +124,14 @@ export const useUserStore = defineStore('user', {
                     if (retData0 && isNotEmpty(retData0.urlMap) && isNotEmpty(retData0.urlMap[-1])) {
                         const uAuthArr = retData0.urlMap[-1]
                         const { userMenus, siderMenus, oPermissions } = generateMenuRoutes(uAuthArr, false)
-
+                        this.SET_ALL_MENUS(uAuthArr)
                         this.SET_U_ALL_MENUS(userMenus)
                         this.SET_SIDER_MENUS(siderMenus)
                         this.SET_OPER_PERMS(oPermissions)
                         sucFlag = 1
                     } else {
                         setFixedRoute()
+                        this.SET_ALL_MENUS([])
                         this.SET_U_ALL_MENUS([])
                         this.SET_SIDER_MENUS([])
                         this.SET_OPER_PERMS([])

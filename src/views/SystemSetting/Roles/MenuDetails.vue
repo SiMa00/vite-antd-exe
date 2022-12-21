@@ -9,19 +9,19 @@
             autocomplete="off"
         >
             <a-form-item label="角色名称" name="name" validateFirst>
-                <a-input v-model:value="formModelIn.name" allowClear placeholder="请输入角色名称" />
+                <a-input v-model:value="formModelIn.name" :disabled="isReadMode" allowClear placeholder="请输入角色名称" />
             </a-form-item>
             <a-form-item label="权限字符" name="code" validateFirst>
-                <a-input v-model:value="formModelIn.code" :disabled="act === 'modify'" allowClear placeholder="请输入权限字符" />
+                <a-input v-model:value="formModelIn.code" :disabled="act !== 'add'" allowClear placeholder="请输入权限字符" />
             </a-form-item>
             <a-form-item label="角色类型" name="type" validateFirst>
-                <a-select v-model:value="formModelIn.type" :options="roleTypeList" placeholder="请选择角色类型"></a-select>
+                <a-select v-model:value="formModelIn.type" :disabled="isReadMode" :options="roleTypeList" placeholder="请选择角色类型"></a-select>
             </a-form-item>
             <a-form-item label="角色顺序" name="index" validateFirst>
-                <a-input-number v-model:value="formModelIn.index" placeholder="请输入角色顺序" :min="0" :max="999999999" style="width: 100%;"/>
+                <a-input-number v-model:value="formModelIn.index" :disabled="isReadMode" placeholder="请输入角色顺序" :min="0" :max="999999999" style="width: 100%;"/>
             </a-form-item>
             <a-form-item label="角色状态" name="status" validateFirst>
-                <a-radio-group v-model:value="formModelIn.status" :options="roleStatusList" placeholder="请选择角色状态"></a-radio-group>
+                <a-radio-group v-model:value="formModelIn.status" :disabled="isReadMode" :options="roleStatusList" placeholder="请选择角色状态"></a-radio-group>
             </a-form-item>
 
             <a-form-item label="菜单权限" name="menuIds" validateFirst>
@@ -29,10 +29,18 @@
                     v-model:value="formModelIn.menuIds"
                     v-model:expandedKeys="expandedKeys"
                     :treeData='menuTreeData'
+                    :isReadMode='isReadMode'
                 />
             </a-form-item>
             <a-form-item label="备注" name="remarks" validateFirst>
-                <a-textarea v-model:value="formModelIn.remarks" :rows="3" showCount :maxlength="500" placeholder="请输入备注" />
+                <a-textarea
+                    v-model:value="formModelIn.remarks"
+                    :disabled="isReadMode"
+                    :rows="3"
+                    showCount
+                    :maxlength="500"
+                    :placeholder="isReadMode ? '' : '请输入备注'"
+                />
             </a-form-item>
         </a-form>
     </div>
@@ -45,7 +53,7 @@ import {
     toRef,
     ref,
 } from 'vue'
-import { isNotEmpty } from "@/utils"
+import { isNotEmpty, generateMenuRoutes } from "@/utils"
 import { useStore } from "vuex"
 import { roleStatusList, roleTypeList } from "@/utils/constant"
 import { getRoleListAPI } from "@/api/systemAPI"
@@ -69,7 +77,22 @@ export default defineComponent({
             },
         })
         const expandedKeys = ref([])
-        const menuTreeData = computed(() => (store.state.user.uAllMenus))
+        const isReadMode = computed(() => props.act === 'view')
+        const menuTreeData = computed(() => {
+            if (props.act === 'view') {
+                if (isNotEmpty(formModel0.value.menuIds)) {
+                    const arr = formModel0.value.menuIds.map(id => {
+                        return store.state.user.allMenus.find(item => item.id === id)
+                    })
+                    const { userMenus } = generateMenuRoutes(arr)
+                    return userMenus
+                } else {
+                    return []
+                }
+            } else {
+                return store.state.user.uAllMenus
+            }
+        })
 
         const diaRules = {
             name: [
