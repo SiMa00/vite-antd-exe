@@ -68,7 +68,7 @@
                         <!-- formRead 特殊的情况 3: input 框前后配置 选择框 READ 时; 必须要用到 formModel，不方便在 getFormReadMList 里设置-->
                         <template v-else-if="isFormRead && (fItem.addonSBefore === 'on' || fItem.addonSAfter === 'on')">
                             <span class="read-psfix-wrap too-much">
-                                <span v-if="fItem.beforeModelKey && formModel[fItem.beforeModelKey]" class="item-prefix">
+                                <span v-if="fItem.beforeModelKey && formModel[fItem.beforeModelKey]" class="item-prefix-s">
                                     {{
                                         (
                                             isNotEmpty(fItem.beforeOptions) && 
@@ -77,7 +77,7 @@
                                     }}
                                 </span>
                                 <span>{{ formModel[fItem.modelKey] }}</span>
-                                <span v-if="fItem.afterModelKey && formModel[fItem.afterModelKey]" class="item-suffix">
+                                <span v-if="fItem.afterModelKey && formModel[fItem.afterModelKey]" class="item-suffix-s">
                                     {{ 
                                         fItem.afterOptions &&
                                         list2Map(fItem.afterOptions)[formModel[fItem.afterModelKey] as string].label 
