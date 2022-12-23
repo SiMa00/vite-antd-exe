@@ -1,6 +1,11 @@
-
+export type baseType = string|number|boolean
 export interface IObjAny { [propName: string|number]: any }
-export interface IObjStrNo { [propName: string|number]: string|number|Array<string|number>|Array<IObjStrNo>|IObjStrNo }
+export interface IObj { [propName: string|number]: baseType|Array<baseType>|Array<IObj>|IObj }
+export interface IOption {
+    label: string;
+    value: string|number;
+}
+
 export type TFormSize = 'large'|'middle'|'small'
 export type IModalType = 'info'|'success'|'error'|'warning'|'confirm'
 export interface ImenuType {}
@@ -30,6 +35,7 @@ export interface IBackMenu {
     status?: 0|1;
     visible?: 0|1;
     visibleStr?: string;
+    meta?: IObjAny;
 }
 // 前台 菜单模型 页面构建需要的
 export interface IFontMenu extends IBackMenu {

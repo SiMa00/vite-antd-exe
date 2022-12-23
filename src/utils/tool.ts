@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { Modal } from 'ant-design-vue'
 // import store from "@/store"
 import router from "@/router"
+import type { FormInstance } from "ant-design-vue"
 import myFrameRoute from "@/router/frameRoute"
 import { nanoid } from 'nanoid'
 import JSONBIG from './parse.js'
@@ -13,11 +14,10 @@ import type {
     IBackMenu, 
     IFontMenu, 
     IObjAny, 
-    IObjStrNo, 
+    IObj, 
     TFormSize,
 } from "./types"
 import type { ModalProps, ModalFuncProps } from "ant-design-vue";
-
 
 export function showModal(content:string, type:ModalFuncProps['type'] = 'warning', title = '温馨提示', orgOpts?:ModalProps) {
     Modal[type]({
@@ -31,7 +31,7 @@ export function showModal(content:string, type:ModalFuncProps['type'] = 'warning
 }
 
 // 对比数据是否发生过改变;
-export function hasChangeData(data1:IObjStrNo, data2:IObjStrNo):boolean {
+export function hasChangeData(data1:IObj, data2:IObj):boolean {
     return JSON.stringify(data1) !== JSON.stringify(data2)
 }
 
@@ -309,37 +309,33 @@ export function sortTreeRelation(rArr:Array<IFontMenu>) {
 export function list2ObjAttr(array:Array<IObjAny>, obj:IObjAny, key = 'key') {
     for (let i = 0; i < array.length; i++) {
         const at = array[i][key]
-        obj[at] = isNotEmpty(array[i].defaultVal) ? array[i].defaultVal : undefined
+        const dftVal = array[i].defaultVal
+        obj[at] = isNotEmpty(dftVal) ? dftVal : undefined
     }
 
     return obj
 }
 /**
- * 特殊的(定制化的) list2ObjAttr
+ * 特殊的(input前后带select定制化的) list2ObjAttr 
+ * defaultSBVal input前 select默认值 
+ * defaultSAVal input后 select默认值 
  */
-export function list2ObjAttr2(array:Array<IObjAny>, obj:IObjAny, key = 'key', type = 'defaultVal') {
+export function list2ObjAttr2(array:Array<IObjAny>, obj:IObjAny, key = 'key') {
     for (let i = 0; i < array.length; i++) {
         const at = array[i][key]
-        const beModelKVal = array[i].beforeModelKey
-        const afModelKVal = array[i].afterModelKey
-        const bFlag = isNotEmpty(beModelKVal)
-        const aFlag = isNotEmpty(afModelKVal)
-        if (type === 'defaultVal') {
-            obj[at] = array[i].defaultVal
-            if (bFlag) {
-                obj[beModelKVal] = array[i].defaultSBVal
-            }
-            if (aFlag) {
-                obj[afModelKVal] = array[i].defaultSAVal
-            }
-        } else {
-            obj[at] = isNotEmpty(array[i].defaultVal) ? array[i].defaultVal : ''
-            if (bFlag) {
-                obj[beModelKVal] = isNotEmpty(array[i].defaultSBVal) ? array[i].defaultSBVal : ''
-            }
-            if (aFlag) {
-                obj[afModelKVal] = isNotEmpty(array[i].defaultSAVal) ? array[i].defaultSAVal : ''
-            }
+        const dftVal = array[i].defaultVal
+        obj[at] = isNotEmpty(dftVal) ? dftVal : undefined
+
+
+        const bModelKey = array[i].beforeModelKey
+        const aModelKey = array[i].afterModelKey
+        if (isNotEmpty(bModelKey)) {
+            const bModelDftVal = array[i].defaultSBVal
+            obj[bModelKey] = isNotEmpty(bModelDftVal) ? bModelDftVal : undefined
+        }
+        if (isNotEmpty(aModelKey)) {
+            const aModelDftVal = array[i].defaultSAVal
+            obj[aModelKey] = isNotEmpty(aModelDftVal) ? aModelDftVal : undefined
         }
     }
 
@@ -441,11 +437,13 @@ export const setRangeNumArr = (start:number, end:number) => {
 
     return result
 }
-export async function validateMyForm(formRef:IObjAny) {
+export async function validateMyForm(formRef:FormInstance) {
     try {
         const res = await formRef.validateFields()
         if (res) {
             return true
+        } else {
+            return false
         }
     } catch (error) {
         return false

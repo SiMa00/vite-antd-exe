@@ -9,7 +9,9 @@ import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
-        vue(),
+        vue({
+            reactivityTransform: true,
+        }),
         Components({ resolvers: [AntDesignVueResolver()] }),
         AutoImport({
             imports: ['vue','vue-router'], //vue: 自动引入vue的 ref、toRefs、onmounted等，无需在页面中再次引入
